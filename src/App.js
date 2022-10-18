@@ -6,7 +6,10 @@ import { AuthContextProvider } from './context/AuthContext'
 import Account from './pages/Account'
 import Home from './pages/Home'
 import Signin from './pages/Signin'
-import Protected from './components/Protected';
+import Protected from './components/Protected'
+import HomeMenu from './pages/HomeMenu'
+import TodoMenu from './pages/TodoMenu'
+import CalendarMenu from './pages/CalendarMenu';
 
 function App() {
   return (
@@ -24,6 +27,9 @@ function App() {
             </Protected>
             } 
           />
+          <Route path='/home' element={<HomeMenu/>}/>
+          <Route path='/calendar' element={<CalendarMenu/>}/>
+          <Route path='/todo' element={<TodoMenu/>}/>
         </Routes>
       </AuthContextProvider>
     </div>
