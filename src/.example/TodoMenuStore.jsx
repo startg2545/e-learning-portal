@@ -2,15 +2,12 @@ import React, { useState, useEffect } from 'react'
 import { db } from '../firebase'
 import { collection, addDoc, deleteDoc, doc, getDocs, updateDoc } from 'firebase/firestore'
 import '../components/design.css'
-import { UserAuth } from '../context/AuthContext'
 
 const TodoMenu = () => {
-  const { logOut, user } = UserAuth()
   const [data, setData] = useState([])
   const [title, setTitle] = useState("")
   const [content, setContent] = useState("")
   const [idChosen, setIdChosen] = useState(0)
-
   const getData = () => {
     getDocs(collection(db, 'todo')).then(query=>{
       if(!query.empty){
@@ -51,20 +48,17 @@ const TodoMenu = () => {
   useEffect(()=>{
     getData()
   },[]);
+
   return (
-    <div>
-      <h1 style={{ margin: '1rem auto', textAlign: 'center' }}>Todo List</h1>
-      <div className='submitForm'>
+    <div className='submitForm'>
       <form onSubmit={(e)=>{
         e.preventDefault()
         const add_data = {
           title: title,
-          content: content,
-          uid: user.uid
+          content: content
         }
         addData(add_data)
       }}>
-        
         <input type='text' value={title} placeholder='Title' maxLength={22}
         onChange={(e)=>{setTitle(e.target.value)}}/><br/>
         <textarea value={content} placeholder='Content' rows={4} cols={32} maxLength={80}
@@ -79,39 +73,27 @@ const TodoMenu = () => {
           id={item.id} 
           removeData={removeData} 
           key={item.id}
-          uidItem ={item.uid}
           updateData={updateData}
           setIdChosen={setIdChosen}
-          uid={user.uid}
         />)
       }
-    </div>
     </div>
   )
 }
 
-const Card = ({title, content, id, removeData, updateData, 
-              setIdChosen, uid, uidItem}) => {
+const Card = ({title, content, id, removeData, updateData, setIdChosen}) => {
   const [updateTitle, setUpdateTitle] = useState()
   const [updateContent, setUpdateContent] = useState()
-
   const submitForm =(e) => {
     document.getElementById('editForm').style.display = 'none'
     updateData(updateTitle, updateContent)
     e.preventDefault()
   }
-  useEffect(()=>{
-    // if(uid!==uidItem){
-    //   document.getElementById('cardId').style.display = 'none'
-    //   console.log(uid)
-    //   console.log(uidItem)
-    // }
-  },[]);
   return(
-    <div className='submitForm titleContent' id='cardId'>
+    <div className='submitForm titleContent'>
       <div>
       <div className='title'>
-        Title: {title}
+        {title}
       </div>
       <button
       className='button' onClick={()=>{
@@ -126,7 +108,7 @@ const Card = ({title, content, id, removeData, updateData,
       </button>
       </div>
         <div id='myContent' className='content'>
-        Description: {content}
+          {content}
         </div>
       <div id='editForm' className='modifyTodo'>
         <form onSubmit={(e)=>{

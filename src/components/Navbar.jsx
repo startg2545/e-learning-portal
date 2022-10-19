@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { UserAuth } from '../context/AuthContext'
+import './design.css'
 
 const Navbar = () => {
   const {user, logOut} = UserAuth()
@@ -30,20 +31,24 @@ const Navbar = () => {
       navigate(path)
   }
   return(
-    <div>
+    <div className='nav'>
       <div>
-        <h1>Firebase Google Auth & Context</h1>
-        <button onClick={handleAccount}>Account</button>
+        <h1 className='navTopic'>
+          E-Learning Portal by ISNE
+        </h1>
+      <button className='button' style={{ left: '32%' }} onClick={handleHome}>Dashboard</button>
+        <button className='button' style={{ left: '32%' }} onClick={handleCalendar}>Calendar</button>
+        <button className='button' style={{ left: '32%' }} onClick={handleTodo}>Todo</button>
+        {user?.displayName ?(
+          <button className='button' style={{ left: '44.5%' }}
+          onClick={handleAccount}>Account</button>
+        ) :(<Link></Link>)}
         {user?.displayName ? (
-          <button onClick={handleSignOut}>Logout</button>
+          <button className='button' style={{ left: '44.5%' }}
+          onClick={handleSignOut}>Logout</button>
         ) : ( 
-          <Link to='/signin'>Sign in</Link>
-        )}
-      </div>
-      <div>
-        <button onClick={handleHome}>Home</button>
-        <button onClick={handleCalendar}>Calendar</button>
-        <button onClick={handleTodo}>Todo</button>
+          <Link to='/signin' className='button' state={{ left: '44.5%' }}>Sign in</Link>
+          )}
       </div>
     </div>
   )

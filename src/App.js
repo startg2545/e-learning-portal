@@ -20,16 +20,28 @@ function App() {
           <Route path='/' element={<Home />} />
           <Route path='/signin' element={<Signin />} />
           <Route 
-            path='/account' 
+            path='/account'
             element={
             <Protected>
               <Account />
             </Protected>
             } 
           />
-          <Route path='/home' element={<HomeMenu/>}/>
-          <Route path='/calendar' element={<CalendarMenu/>}/>
-          <Route path='/todo' element={<TodoMenu/>}/>
+          <Route path='/home' element={
+            <Protected>
+              <HomeMenu/>
+            </Protected>
+          }/>
+          <Route path='/calendar' element={
+            <Protected>
+              <CalendarMenu/>
+            </Protected>
+          }/>
+          <Route path='/todo' element={
+            <Protected>
+              <TodoMenu/>
+            </Protected>
+          }/>
         </Routes>
       </AuthContextProvider>
     </div>

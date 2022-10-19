@@ -16,12 +16,12 @@ const Signin = () => {
     }
     useEffect(()=>{
         if(user != null)
-            navigate('/account')
+            navigate('/home')
     },[user])
 
     return(
         <div>
-            <h1>Sign in</h1>
+            <h1 className='button'>Sign in</h1>
             <div>
                 <GoogleButton onClick={handleGoogleSignIn}/>
             </div>

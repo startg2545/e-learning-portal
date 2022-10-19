@@ -18,14 +18,14 @@ export const AuthContextProvider = ({children}) => {
         signInWithRedirect(auth, provider)
     }
 
-    const logOut = () => {
+    const logOut = () => { 
         signOut(auth)
+        console.log('log out!')
     }
-
     useEffect(()=>{
         const createAccess = onAuthStateChanged(auth, (currentUser)=>{
             setUser(currentUser)
-            console.log('User',currentUser)
+            console.log('User', currentUser)
         })
         return() => {
             createAccess()

@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>The Handsome Calendar of JIRO</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    * {box-sizing: border-box;}
+    ul {list-style-type: none;}
+    body {font-family: Verdana, sans-serif;}	
+
+    .month {
+      padding: 70px 25px;
+      width: 100%;
+      background-image: url("img/doggoMemeOnly.png");
+      background-size:contain;
+      text-align: center;
+    }
+
+    .month ul {
+    margin: 0;
+    padding: 0;
+    }
+
+    .month li {
+    color: rgb(255, 255, 255);
+    font-size: 20px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-align: center;
+    font-weight: bold; 
+    }
+
+    .month .prev {
+    padding-top: 10px;
+    }
+
+    .month .next {
+    padding-top: 10px;
+    }
+
+    .weekdays {
+    margin: 0;
+    padding: 10px 0;
+    background-color: rgb(108, 255, 105);
+    }
+
+    .weekdays li {
+    display: inline-block;
+    width: 13.6%;
+    color: #666;
+    text-align: center;
+    }
+
+    .days {
+    padding: 10px 0;
+    background: rgb(194, 255, 193);
+    margin: 0;
+    }
+
+    .days li {
+    list-style-type: none;
+    display: inline-block;
+    width: 13.6%;
+    text-align: center;
+    margin-bottom: 60px;
+    font-size:12px;
+    color: #777;
+    }
+
+    .days li .active {
+    padding: 5px;
+    background: #1abc9c;
+    color: white !important
+    }
+
+    @media screen and (max-width:720px) {
+    .weekdays li, .days li {width: 13.1%;}
+    }
+
+    @media screen and (max-width: 420px) {
+    .weekdays li, .days li {width: 12.5%;}
+    .days li .active {padding: 2px;}
+    }
+
+    @media screen and (max-width: 290px) {
+    .weekdays li, .days li {width: 12.2%;}
+    }
+    #month_inc{
+        background-color: white;
+        color: black;
+        border-radius: 15px;
+        padding: 5px;
+    }
+    #month_dec{
+        background-color: white;
+        color: black;
+        border-radius: 15px;
+        padding: 5px;
+    }
+
+    /* The popup form - hidden by default */
+    body {font-family: Arial, Helvetica, sans-serif;}
+* {box-sizing: border-box;}
+
+/* Button used to open the contact form - fixed at the bottom of the page */
+.open-button {
+  background-color: #555;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  opacity: 0.8;
+  position: fixed;
+  bottom: 23px;
+  right: 28px;
+  width: 280px;
+}
+
+/* The popup form - hidden by default */
+.form-popup {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  right: 15px;
+  border: 3px solid #f1f1f1;
+  z-index: 9;
+}
+
+/* Add styles to the form container */
+.form-container {
+  max-width: 300px;
+  padding: 10px;
+  background-color: white;
+}
+
+/* Full-width input fields */
+.form-container input[type=text], .form-container input[type=password] {
+  width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  border: none;
+  background: #f1f1f1;
+}
+
+/* When the inputs get focus, do something */
+.form-container input[type=text]:focus, .form-container input[type=password]:focus {
+  background-color: #ddd;
+  outline: none;
+}
+
+/* Set a style for the submit/login button */
+.form-container .btn {
+  background-color: #0088ff;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom:10px;
+  opacity: 0.8;
+}
+
+/* Add a red background color to the cancel button */
+.form-container .cancel {
+  background-color: red;
+}
+
+/* Add some hover effects to buttons */
+.form-container .btn:hover, .open-button:hover {
+  opacity: 1;
+}
+
+/* Add show information in title */
+.describe-popup {
+  display: none;
+  position: fixed;
+  border: 3px solid #f1f1f1;
+  z-index: 9;
+}
+
+/* Add container in title */
+.describe-container{
+  max-width: 500px;
+  padding: 90px;
+  background-color: white;
+}
+</style>
+
+</head>
+<body>
+    <h1 style="text-align: center;">My Calendar</h1>
+    <div class="month">
+        <ul>
+        <div style="margin: 0; display: inline block 1px; position: relative;">
+            <li><span style="font-size:18px;background-color: rgb(2, 104, 0);padding:15px;border-radius: 10px;border:3px solid lime">
+                <span id="month_dec" onclick="previousMonth();">&#10094;&#10094;</span> 
+                <span id="monthNum"></span> 
+                <span id="month_inc" onclick="nextMonth();">&#10095;&#10095;</span>
+            </li>
+        </div>
+        </ul>
+    </div>
+      
+      <ul class="weekdays">
+      <b>
+        <li>Mo</li>
+        <li>Tu</li>
+        <li>We</li>
+        <li>Th</li>
+        <li>Fr</li>
+        <li>Sa</li>
+        <li>Su</li>
+      </b>
+      </ul>
+      
+      <ul class="days" class="open-button">
+      <b>
+        <li onclick="openForm(1)"><span id="today1">1</span><br><span id="appointment1" onclick="openInfo(1)"></span></li>
+        <li onclick="openForm(2)"><span id="today2">2</span><br><span id="appointment2" onclick="openInfo(2)"></span></li>
+        <li onclick="openForm(3)"><span id="today3">3</span><br><span id="appointment3" onclick="openInfo(3)"></span></li>
+        <li onclick="openForm(4)"><span id="today4">4</span><br><span id="appointment4" onclick="openInfo(4)"></span></li>
+        <li onclick="openForm(5)"><span id="today5">5</span><br><span id="appointment5" onclick="openInfo(5)"></span></li>
+        <li onclick="openForm(6)"><span id="today6">6</span><br><span id="appointment6" onclick="openInfo(6)"></span></li>
+        <li onclick="openForm(7)"><span id="today7">7</span><br><span id="appointment7" onclick="openInfo(7)"></span></li>
+        <li onclick="openForm(8)"><span id="today8">8</span><br><span id="appointment8" onclick="openInfo(8)"></span></li>
+        <li onclick="openForm(9)"><span id="today9">9</span><br><span id="appointment9" onclick="openInfo(9)"></span></li>
+        <li onclick="openForm(10)"><span id="today10">10</span><br><span id="appointment10" onclick="openInfo(10)"></span></li>
+        <li onclick="openForm(11)"><span id="today11">11</span><br><span id="appointment11" onclick="openInfo(11)"></span></li>
+        <li onclick="openForm(12)"><span id="today12">12</span><br><span id="appointment12" onclick="openInfo(12)"></span></li>
+        <li onclick="openForm(13)"><span id="today13">13</span><br><span id="appointment13" onclick="openInfo(13)"></span></li>
+        <li onclick="openForm(14)"><span id="today14">14</span><br><span id="appointment14" onclick="openInfo(14)"></span></li>
+        <li onclick="openForm(15)"><span id="today15">15</span><br><span id="appointment15" onclick="openInfo(15)"></span></li>
+        <li onclick="openForm(16)"><span id="today16">16</span><br><span id="appointment16" onclick="openInfo(16)"></span></li>
+        <li onclick="openForm(17)"><span id="today17">17</span><br><span id="appointment17" onclick="openInfo(17)"></span></li>
+        <li onclick="openForm(18)"><span id="today18">18</span><br><span id="appointment18" onclick="openInfo(18)"></span></li>
+        <li onclick="openForm(19)"><span id="today19">19</span><br><span id="appointment19" onclick="openInfo(19)"></span></li>
+        <li onclick="openForm(20)"><span id="today20">20</span><br><span id="appointment20" onclick="openInfo(20)"></span></li>
+        <li onclick="openForm(21)"><span id="today21">21</span><br><span id="appointment21" onclick="showInfo(21)"></span></li>
+        <li onclick="openForm(22)"><span id="today22">22</span><br><span id="appointment22" onclick="openInfo(22)"></span></li>
+        <li onclick="openForm(23)"><span id="today23">23</span><br><span id="appointment23" onclick="openInfo(23)"></span></li>
+        <li onclick="openForm(24)"><span id="today24">24</span><br><span id="appointment24" onclick="openInfo(24)"></span></li>
+        <li onclick="openForm(25)"><span id="today25">25</span><br><span id="appointment25" onclick="openInfo(25)"></span></li>
+        <li onclick="openForm(26)"><span id="today26">26</span><br><span id="appointment26" onclick="openInfo(26)"></span></li>
+        <li onclick="openForm(27)"><span id="today27">27</span><br><span id="appointment27" onclick="openInfo(27)"></span></li>
+        <li onclick="openForm(28)"><span id="today28">28</span><br><span id="appointment28" onclick="openInfo(28)"></span></li>
+        <li onclick="openForm(29)"><span id="today29">29</span><br><span id="appointment29" onclick="openInfo(29)"></span></li>
+        <li onclick="openForm(30)"><span id="today30">30</span><br><span id="appointment30" onclick="openInfo(30)"></span></li>
+        <li onclick="openForm(31)"><span id="today31">31</span><br><span id="appointment31" onclick="openInfo(31)"></span></li>
+      </b>
+      </ul>
+
+    <!-- form part -->
+
+      <div class="form-popup" id="myForm">
+        <form class="form-container" id="calendarForm">
+            <h1>Appointment</h1>
+      
+            <label for="date"><b>Date</b></label>
+            <input type="date" placeholder="Enter date" id="date" required><br>
+
+            <label for="time"><b>Time</b></label>
+            <input type="time" placeholder="Enter time" id="time" required><br>
+
+            <label for="title"><b>Title</b></label>
+            <input type="text" placeholder="Enter title" id="title" required>
+      
+            <label for="description"><b>Description</b></label>
+            <textarea placeholder="What is your description?"
+            rows="4" cols="35" id="describe" ></textarea>     
+
+            <label for="duration"><b>Duration</b></label>
+            <input id="duration-input" type="text" required pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}:[0-9]{2}" 
+            value="00:00:00:00" title="Write a duration in the format hh:mm:ss:ms">
+            <p id="output"></p>
+
+            <button type="submit" id="submit" class="btn" >Save</button>
+            <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+          </form>
+      </div>
+
+      <!-- text describe part -->
+
+      <div class="form-popup" id="desForm">
+        <form class="describe-container">
+          <h1>Information</h1>
+          <label for="titleShow"><b>Title: </b></label>
+          <span id="titleShow"></span><br>
+          
+          <label for="dateShow"><b>Date: </b></label>
+          <span id="dateShow"></span><br>
+
+          <label for="timeShow"><b>Time: </b></label>
+          <span id="timeShow"></span><br>
+
+          <label for="descriptionShow"><b>Description: </b></label>
+          <span id="descriptionShow"></span><br>
+
+          <button type="button" onclick="closeInfo()">Close</button>
+        </form>
+      </div>
+
+<script>
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    window.localStorage; // to store information 
+    const d = new Date(); // set current date
+    var getMonthNum = d.getMonth();
+    var dateInput = d.getDate();
+    // document.getElementById('today31').style.display="none";
+    var monthNum = document.getElementById('monthNum');
+    var yearNum = document.getElementById('yearNum');
+    
+    document.getElementById("today" + dateInput).className = "active"; // active day for today
+    monthNum.innerHTML = months[getMonthNum] + " " + d.getFullYear(); // show month + year
+    
+    const monthDays = [31,28,31,30,31,30,31,31,30,31,30,31]; // set how many days in each month
+    
+    var previousMonth = function(){
+      getMonthNum--; // change into previous month
+      monthNum.innerHTML = months[getMonthNum] + " " + d.getFullYear();
+      setDay();
+      changeEventInMonth(getMonthNum);
+    }
+    var nextMonth = function(){
+      getMonthNum++; // change into next month 
+      monthNum.innerHTML = months[getMonthNum] + " " + d.getFullYear();
+      setDay();
+      changeEventInMonth(getMonthNum);
+    }
+    var setDay = function(){
+      for(var i=28;i<32;i++){
+        if(i>monthDays[getMonthNum]){
+          document.getElementById("today" + i).style.display="none";
+        }else{
+          document.getElementById("today" + i).style.display="initial";
+        }
+      }
+    }   
+    
+    // set date from your clicking
+    var setDateDefault = function(getDayFromClicking){
+      let getMonth = new Date(item.date).getMonth()+1;
+      if(getMonth<10){
+        getMonth = '0'+getMonth;
+      }
+      if(getDayFromClicking<10){
+        getDayFromClicking = '0'+getDayFromClicking;
+      }
+
+      let date = 2022+'-'+getMonth+ '-'+getDayFromClicking; 
+      document.getElementById('date').value = date;
+    }
+      
+      // form part
+      var isShowInfoOpening = false;
+      
+      function openForm(getDayFromClicking) {
+        if(isShowInfoOpening==true){return;}
+        document.getElementById("myForm").style.display = "block";
+        // dateInput.value = new Date(yearNum,getMonthNum,getDayFromClicking);
+        setDateDefault(getDayFromClicking);
+      }
+      
+      function closeForm() {
+        document.getElementById("myForm").style.display = "none";
+      }
+      
+      function openInfo(x){
+        document.getElementById("desForm").style.display = "block";
+        
+        setEvent(x);
+        
+        isShowInfoOpening = true;
+      }
+      
+      function closeInfo(){
+        document.getElementById("desForm").style.display = "none";
+        
+        document.getElementById("titleShow").innerHTML = '';
+        
+        isShowInfoOpening = false;
+      }
+      
+      function setEvent(x){
+        var countEvent = 0;
+        const objCache = JSON.parse(localStorage.getItem('cache'));
+          for(item of objCache){
+            let getTitle = item.title || "";
+            let getMonth = new Date(item.date).getMonth();
+            let getDay = new Date(item.date).getDate();
+          if(getMonthNum==getMonth && getDay==x){
+            countEvent++;
+            if(countEvent>1){
+              document.getElementById("titleShow").innerHTML += ', ';
+              document.getElementById("dateShow").innerHTML += ', ';
+              document.getElementById("timeShow").innerHTML += ', ';
+              document.getElementById("descriptionShow").innerHTML += ', ';
+            }
+            document.getElementById("titleShow").innerHTML += getTitle;
+            document.getElementById("dateShow").innerHTML += item.date;
+            document.getElementById("timeShow").innerHTML += item.time;
+            document.getElementById("descriptionShow").innerHTML += item.description;
+          }
+        }
+        
+        // alert(JSON.stringify(objCache));
+      }
+
+      // change event when change month
+      function changeEventInMonth(x){
+        const objCache = JSON.parse(localStorage.getItem('cache'));
+        for(item of objCache){
+          let getTitle = item.title || "";
+          let getMonth = new Date(item.date).getMonth();
+          let getDay = new Date(item.date).getDate();
+          if(getMonth==x){
+            document.getElementById("appointment"+getDay.toString()).innerHTML += '<p>'+getTitle+'</p>';
+          }else{
+            document.getElementById("appointment"+getDay.toString()).innerHTML = '';
+          }
+        } 
+      }
+      
+      var dateInput = document.getElementById('date');
+      var timeInput = document.getElementById('time');
+      var titleInput = document.getElementById('title');
+      var describeInput = document.getElementById('describe');
+      var durationInput = document.getElementById("duration-input");
+      
+      var resultP = document.getElementById("output");
+
+      durationInput.addEventListener("change", function (e) {
+        resultP.textContent = "";
+        durationInput.checkValidity();
+      });
+      
+      durationInput.addEventListener("invalid", function (e) {
+        resultP.textContent = "Invalid input";
+      });
+         
+      // your local storage will be in window
+      function myStorage() {
+        try {
+          return 'localStorage' in window && window['localStorage'] !== null;     
+        } catch (e) {
+          return false;
+        }
+      }   
+      // localStorage.clear(); /*<-- open this line when you want to reset title */
+      getDatabase('http://kencosh.com/calendar/calendar.php')
+
+      async function getDatabase(link){
+        await fetch(link)
+        .then((res)=>res.text())
+        .then((data)=>{
+          calendarAddEvent(JSON.parse(data));
+        })
+      }
+
+      var calendar_event=[];
+      getCache();
+      function calendarAddEvent(data){
+        //concat
+        try{
+          for(item of data){
+            //validation no duplicate name
+            let dup = false;
+            for(i of calendar_event){
+              console.log(calendar_event.length);
+              if(i.title == item.title){
+                dup=true;
+                break;
+              }
+            }
+            if(!dup){
+              calendar_event.push(item);
+            }
+          }
+        }
+        catch(e){
+          console.log(e.message);
+        }
+        updateData(calendar_event);
+      }
+      
+      function updateData(data){
+        for(let i=1;i<=31;i++){
+          try{
+            document.getElementById('appointment'+i).innerHTML = '';
+          }
+          catch(e){
+
+          }
+        }
+        for(item of data){
+          let getTitle = item.title || "";
+          let getMonth = new Date(item.date).getMonth();
+          let getDay = new Date(item.date).getDate();
+          if(getMonth==getMonthNum){
+            document.getElementById("appointment"+getDay.toString()).innerHTML += '<p>'+getTitle+'</p>';
+          }
+        }
+        setCache(data);
+      }
+      
+      function setCache(data){
+        const datajson = JSON.stringify(data);
+        localStorage.setItem('cache',datajson);
+      }
+
+      function getCache(){
+        const data = JSON.parse(localStorage.getItem('cache')||"{}");
+        calendarAddEvent(data);
+      }
+
+      $("submit").addEventListener("click",function(e){
+        e.preventDefault();
+        if(titleInput.value.length!=0 &&
+        dateInput.value.length!=0 && timeInput.value.length!=0){
+          const data_input = {
+            title: titleInput.value,
+            date: JSON.stringify(dateInput.value),
+            time: timeInput.value,
+            description: describeInput.value
+          }
+          calendarAddEvent([data_input]);
+          closeForm();
+        } 
+      });
+          
+      function $(id)
+      {
+        return document.getElementById(id);
+      }
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/7.14.1-0/firebase.js"></script>
+  <script src="firebase.js"></script>
+</body>
+</html>
